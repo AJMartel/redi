@@ -4,6 +4,8 @@ now=$(date +"%s")
 
 echo [+] updating
 apt-get update
+# install depends on wget
+apt-get install --assume-yes wget
 
 if [ "$2" = "dns" ]
 then
@@ -46,7 +48,10 @@ else
     wget https://dl.eff.org/certbot-auto
     chmod a+x certbot-auto
     echo [+] generating certifcates
-    mv /etc/letsencrypt/ /etc/letsencrypt_bak_${now}/
+    if [ -e /etc/letsencrypt ]
+    then
+      mv /etc/letsencrypt/ /etc/letsencrypt_bak_${now}/
+    fi
     DOMAINS=( $(echo $1 | tr ',' ' ') )
     for DOMAIN in "${DOMAINS[@]}"
     do
